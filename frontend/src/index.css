@@ -1,75 +1,130 @@
 @import "tailwindcss";
 
+@variant dark (&:where(.dark, .dark *));
+
 @layer base {
   :root {
-    --background: 210 20% 98%;
-    --foreground: 222 47% 11%;
-    --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
+    /* macOS Light Mode Tokens */
+    --background: 240 5% 96%;        /* #f5f5f7 Apple off-white canvas */
+    --foreground: 240 10% 12%;       /* #1d1d1f Deep charcoal text */
+    --card: 0 0% 100%;               /* #ffffff Clean card surface */
+    --card-foreground: 240 10% 12%;
     --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
-    --primary: 221 83% 53%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 25% 94%;
-    --secondary-foreground: 222 47% 11%;
-    --muted: 210 20% 95%;
-    --muted-foreground: 215 16% 47%;
-    --accent: 210 25% 92%;
-    --accent-foreground: 222 47% 11%;
+    --popover-foreground: 240 10% 12%;
+    --primary: 211 100% 45%;         /* #0071e3 Apple System Blue */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 240 5% 92%;         /* #eaeaea Soft surface */
+    --secondary-foreground: 240 10% 12%;
+    --muted: 240 5% 93%;             /* #ededf0 */
+    --muted-foreground: 240 4% 46%;  /* #86868b Subdued Apple gray */
+    --accent: 240 5% 90%;
+    --accent-foreground: 240 10% 12%;
     --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214 20% 89%;
-    --input: 214 20% 89%;
-    --ring: 221 83% 53%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 240 6% 90%;            /* #e5e5ea Hairline border */
+    --input: 240 6% 90%;
+    --ring: 211 100% 45%;
 
-    /* Dedicated Domain Tokens */
-    --actual-color: #059669;
-    --forecast-color: #d97706;
-    --revision-color: #3b82f6;
+    /* Apple Domain Specific Color Tokens */
+    --actual-color: #34c759;
+    --forecast-color: #ff9500;
+    --revision-color: #0071e3;
   }
 
   .dark {
-    --background: 224 45% 9%;
-    --foreground: 210 40% 98%;
-    --card: 224 40% 12%;
-    --card-foreground: 210 40% 98%;
-    --popover: 224 40% 12%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 217 91% 60%;
-    --primary-foreground: 222 47% 11%;
-    --secondary: 217 33% 18%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217 33% 18%;
-    --muted-foreground: 215 20% 65%;
-    --accent: 217 33% 20%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 63% 31%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217 33% 20%;
-    --input: 217 33% 20%;
-    --ring: 217 91% 60%;
+    /* macOS Dark Mode Tokens */
+    --background: 240 6% 9%;         /* #161618 Deep dark slate */
+    --foreground: 0 0% 98%;          /* #f5f5f7 Crisp text */
+    --card: 240 5% 12%;              /* #1c1c1e Elevated dark card */
+    --card-foreground: 0 0% 98%;
+    --popover: 240 5% 14%;           /* #232326 */
+    --popover-foreground: 0 0% 98%;
+    --primary: 211 100% 52%;         /* #0a84ff Dark System Blue */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 240 5% 18%;         /* #2c2c2e */
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 5% 18%;             /* #2c2c2e */
+    --muted-foreground: 240 5% 65%;  /* #98989d */
+    --accent: 240 5% 22%;            /* #38383a */
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 72% 51%;        /* #ff453a */
+    --destructive-foreground: 0 0% 100%;
+    --border: 240 5% 20%;            /* #323236 Hairline border */
+    --input: 240 5% 20%;
+    --ring: 211 100% 52%;
 
-    --actual-color: #10b981;
-    --forecast-color: #f59e0b;
-    --revision-color: #60a5fa;
+    /* Apple Domain Specific Color Tokens */
+    --actual-color: #30d158;
+    --forecast-color: #ff9f0a;
+    --revision-color: #0a84ff;
   }
 }
 
 body {
   background-color: hsl(var(--background));
   color: hsl(var(--foreground));
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", sans-serif;
   margin: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-/* Tabular Numerals for Finance and Energy Metrics */
+/* Tabular Numerals for Energy and Date Metrics */
 .tabular-nums {
   font-variant-numeric: tabular-nums;
 }
 
-/* Custom Scrollbar for Dense Tables */
+/* Apple-style Shimmer Keyframes */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.animate-shimmer::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateX(-100%);
+  background-image: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.12) 20%,
+    rgba(255, 255, 255, 0.25) 60%,
+    rgba(255, 255, 255, 0)
+  );
+  animation: shimmer 1.8s infinite;
+  content: "";
+}
+
+.dark .animate-shimmer::after {
+  background-image: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.04) 20%,
+    rgba(255, 255, 255, 0.08) 60%,
+    rgba(255, 255, 255, 0)
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-shimmer::after {
+    animation: none;
+  }
+}
+
+/* Custom Sleek Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;

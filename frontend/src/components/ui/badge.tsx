@@ -11,18 +11,18 @@ export function Badge({
   ...props
 }: BadgeProps) {
   const variantStyles = {
-    default: "border-transparent bg-primary text-primary-foreground shadow hover:bg-primary/80",
-    secondary: "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
-    destructive: "border-transparent bg-destructive text-destructive-foreground shadow hover:bg-destructive/80",
-    outline: "text-foreground",
-    success: "border-transparent bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 font-semibold border border-emerald-500/30",
-    warning: "border-transparent bg-amber-500/15 text-amber-700 dark:text-amber-400 font-semibold border border-amber-500/30",
+    default: "border-transparent bg-primary text-primary-foreground shadow-2xs",
+    secondary: "border-border/60 bg-secondary/80 text-secondary-foreground",
+    destructive: "border-rose-500/25 bg-rose-500/10 text-rose-600 dark:text-rose-400 font-semibold",
+    outline: "border-border/70 text-foreground bg-card/40 backdrop-blur-xs",
+    success: "border-emerald-500/25 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 font-semibold",
+    warning: "border-amber-500/25 bg-amber-500/10 text-amber-700 dark:text-amber-400 font-semibold",
   };
 
   return (
     <div
       className={cn(
-        "inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 select-none",
+        "inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold tracking-tight transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 select-none",
         variantStyles[variant],
         className
       )}

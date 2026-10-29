@@ -31,7 +31,7 @@ export function TabsList({
   return (
     <div
       className={cn(
-        "inline-flex h-10 items-center justify-center rounded-lg bg-muted p-1 text-muted-foreground",
+        "inline-flex h-10 items-center justify-center rounded-xl bg-muted/70 p-1 text-muted-foreground border border-border/50",
         className
       )}
       {...props}
@@ -61,10 +61,10 @@ export function TabsTrigger({
     <button
       type="button"
       className={cn(
-        "inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+        "inline-flex items-center justify-center whitespace-nowrap rounded-lg px-3.5 py-1.5 text-xs font-semibold ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 cursor-pointer active:scale-[0.98]",
         isSelected
-          ? "bg-background text-foreground shadow-sm font-semibold"
-          : "hover:bg-background/50 hover:text-foreground",
+          ? "bg-card text-foreground shadow-xs font-bold"
+          : "text-muted-foreground hover:text-foreground hover:bg-card/40",
         className
       )}
       onClick={() => context.onValueChange(value)}

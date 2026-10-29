@@ -92,20 +92,20 @@ export function AccuracyAnalysisView({
   return (
     <div className="space-y-6">
       {/* Methodology Standards & Market Boundary Disclosures */}
-      <Card className="border-primary/20 bg-primary/5 shadow-xs">
-        <CardContent className="p-4 flex items-start space-x-3 text-xs">
-          <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0 mt-0.5">
-            <ShieldCheck className="h-4 w-4" />
+      <Card className="rounded-2xl border-primary/20 bg-primary/5 shadow-xs">
+        <CardContent className="p-5 flex items-start space-x-3.5 text-xs">
+          <div className="h-9 w-9 rounded-xl bg-primary/10 flex items-center justify-center text-primary shrink-0 mt-0.5">
+            <ShieldCheck className="h-4.5 w-4.5" />
           </div>
           <div className="space-y-1.5 flex-1">
-            <h4 className="font-bold text-foreground text-sm">
+            <h4 className="font-bold text-foreground text-sm tracking-tight">
               Methodological Standards &amp; Market Boundary Disclosures
             </h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1 text-muted-foreground leading-relaxed">
               <div>
                 <p>
                   <strong className="text-foreground">Error Convention:</strong> All error deltas follow{" "}
-                  <code className="text-primary font-mono font-semibold bg-primary/10 px-1 py-0.5 rounded">
+                  <code className="text-primary font-mono font-semibold bg-primary/10 px-1 py-0.5 rounded-md">
                     error = forecast − actual
                   </code>
                   . Positive bias denotes systematic overforecasting (procurement risk: volume shortage requiring within-day spot balance).
@@ -127,55 +127,61 @@ export function AccuracyAnalysisView({
       {/* Summary Stat Cards */}
       {dailyStats && (
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <Card className="shadow-xs">
+          <Card className="rounded-2xl border-border/70 shadow-xs">
             <CardHeader className="flex flex-row items-center justify-between pb-1 space-y-0">
-              <CardTitle className="text-xs uppercase font-semibold text-muted-foreground">
+              <CardTitle className="text-xs uppercase font-semibold text-muted-foreground tracking-wider">
                 Best Forecast Day
               </CardTitle>
-              <Award className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+              <div className="h-8 w-8 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
+                <Award className="h-4 w-4" />
+              </div>
             </CardHeader>
             <CardContent>
-              <div className="text-lg font-bold font-mono text-foreground">
+              <div className="text-lg font-bold font-mono text-foreground tabular-nums">
                 {dailyStats.bestDay?.date ?? "--"}
               </div>
               <p className="text-xs text-muted-foreground mt-0.5">
                 Lowest MAE:{" "}
-                <span className="font-semibold text-emerald-600 dark:text-emerald-400 font-mono">
+                <span className="font-semibold text-emerald-600 dark:text-emerald-400 font-mono tabular-nums">
                   {dailyStats.bestDay?.mae?.toLocaleString()} MW
                 </span>
               </p>
             </CardContent>
           </Card>
 
-          <Card className="shadow-xs">
+          <Card className="rounded-2xl border-border/70 shadow-xs">
             <CardHeader className="flex flex-row items-center justify-between pb-1 space-y-0">
-              <CardTitle className="text-xs uppercase font-semibold text-muted-foreground">
+              <CardTitle className="text-xs uppercase font-semibold text-muted-foreground tracking-wider">
                 Highest Volatility Day
               </CardTitle>
-              <AlertTriangle className="h-4 w-4 text-rose-500" />
+              <div className="h-8 w-8 rounded-xl bg-rose-500/10 flex items-center justify-center text-rose-600 dark:text-rose-400">
+                <AlertTriangle className="h-4 w-4" />
+              </div>
             </CardHeader>
             <CardContent>
-              <div className="text-lg font-bold font-mono text-foreground">
+              <div className="text-lg font-bold font-mono text-foreground tabular-nums">
                 {dailyStats.worstDay?.date ?? "--"}
               </div>
               <p className="text-xs text-muted-foreground mt-0.5">
                 Peak MAE:{" "}
-                <span className="font-semibold text-rose-600 dark:text-rose-400 font-mono">
+                <span className="font-semibold text-rose-600 dark:text-rose-400 font-mono tabular-nums">
                   {dailyStats.worstDay?.mae?.toLocaleString()} MW
                 </span>
               </p>
             </CardContent>
           </Card>
 
-          <Card className="shadow-xs">
+          <Card className="rounded-2xl border-border/70 shadow-xs">
             <CardHeader className="flex flex-row items-center justify-between pb-1 space-y-0">
-              <CardTitle className="text-xs uppercase font-semibold text-muted-foreground">
+              <CardTitle className="text-xs uppercase font-semibold text-muted-foreground tracking-wider">
                 Lead-Time Degradation
               </CardTitle>
-              <TrendingUp className="h-4 w-4 text-amber-500" />
+              <div className="h-8 w-8 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-600 dark:text-amber-400">
+                <TrendingUp className="h-4 w-4" />
+              </div>
             </CardHeader>
             <CardContent>
-              <div className="text-lg font-bold font-mono text-foreground">
+              <div className="text-lg font-bold font-mono text-foreground tabular-nums">
                 {dailyStats.degradationMultiplier ? `${dailyStats.degradationMultiplier}x Expansion` : "--"}
               </div>
               <p className="text-xs text-muted-foreground mt-0.5">
@@ -189,7 +195,7 @@ export function AccuracyAnalysisView({
       {/* Grid: Daily Accuracy Performance and Lead Time Decay */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Daily Accuracy Breakdown Chart */}
-        <Card className="shadow-xs">
+        <Card className="rounded-2xl border-border/70 shadow-xs">
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between">
               <div>
@@ -200,7 +206,7 @@ export function AccuracyAnalysisView({
                   Tracking daily forecast deviation and volatility magnitude across time.
                 </CardDescription>
               </div>
-              <Badge variant="outline" className="text-xs font-mono">
+              <Badge variant="outline" className="text-xs font-mono tabular-nums">
                 {dailyData.length} Days
               </Badge>
             </div>
@@ -209,28 +215,46 @@ export function AccuracyAnalysisView({
             <div className="h-[300px] w-full pt-2">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={dailyData} margin={{ top: 10, right: 10, left: 10, bottom: 20 }}>
-                  <CartesianGrid strokeDasharray="3 3" opacity={0.25} />
+                  <CartesianGrid strokeDasharray="3 3" opacity={0.2} stroke="currentColor" className="text-border" />
                   <XAxis
                     dataKey="date"
                     tick={{ fontSize: 10 }}
-                    stroke="#888888"
+                    stroke="currentColor"
+                    className="text-muted-foreground"
                     tickFormatter={(d) => d.slice(5)} // MM-DD
                   />
                   <YAxis
                     tick={{ fontSize: 10 }}
-                    stroke="#888888"
+                    stroke="currentColor"
+                    className="text-muted-foreground"
                     unit=" MW"
                     tickFormatter={(val) => `${(val / 1000).toFixed(0)}k`}
                   />
                   <Tooltip
-                    formatter={(val: unknown) => [
-                      typeof val === "number" ? `${val.toLocaleString()} MW` : "N/A",
-                    ]}
-                    labelFormatter={(label) => `Date: ${label}`}
+                    content={({ active, payload, label }) => {
+                      if (active && payload && payload.length) {
+                        return (
+                          <div className="bg-card/95 backdrop-blur-md border border-border/80 shadow-2xl rounded-xl p-3 text-xs space-y-1.5 min-w-[200px]">
+                            <div className="font-semibold text-foreground border-b border-border/60 pb-1">
+                              Date: {label}
+                            </div>
+                            {payload.map((entry, idx) => (
+                              <div key={idx} className="flex justify-between items-center space-x-2">
+                                <span className="text-muted-foreground">{entry.name}:</span>
+                                <span className="font-mono font-bold text-foreground tabular-nums">
+                                  {typeof entry.value === "number" ? `${entry.value.toLocaleString()} MW` : "N/A"}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        );
+                      }
+                      return null;
+                    }}
                   />
                   <Legend wrapperStyle={{ fontSize: 11, paddingTop: 10 }} />
-                  <Bar dataKey="mae" name="MAE (MW)" fill="#2563eb" radius={[3, 3, 0, 0]} />
-                  <Bar dataKey="rmse" name="RMSE (MW)" fill="#d97706" radius={[3, 3, 0, 0]} />
+                  <Bar dataKey="mae" name="MAE (MW)" fill="#0071e3" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="rmse" name="RMSE (MW)" fill="#ff9500" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -238,7 +262,7 @@ export function AccuracyAnalysisView({
         </Card>
 
         {/* Lead-Time Accuracy Curve */}
-        <Card className="shadow-xs">
+        <Card className="rounded-2xl border-border/70 shadow-xs">
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between">
               <div>
@@ -258,27 +282,45 @@ export function AccuracyAnalysisView({
             <div className="h-[300px] w-full pt-2">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={buckets} margin={{ top: 10, right: 10, left: 10, bottom: 20 }}>
-                  <CartesianGrid strokeDasharray="3 3" opacity={0.25} />
+                  <CartesianGrid strokeDasharray="3 3" opacity={0.2} stroke="currentColor" className="text-border" />
                   <XAxis
                     dataKey="bucketName"
                     tick={{ fontSize: 10 }}
-                    stroke="#888888"
+                    stroke="currentColor"
+                    className="text-muted-foreground"
                   />
                   <YAxis
                     tick={{ fontSize: 10 }}
-                    stroke="#888888"
+                    stroke="currentColor"
+                    className="text-muted-foreground"
                     unit=" MW"
                     tickFormatter={(val) => `${(val / 1000).toFixed(0)}k`}
                   />
                   <Tooltip
-                    formatter={(val: unknown, name: unknown) => [
-                      typeof val === "number" ? `${val.toLocaleString()} MW` : "N/A",
-                      String(name),
-                    ]}
+                    content={({ active, payload, label }) => {
+                      if (active && payload && payload.length) {
+                        return (
+                          <div className="bg-card/95 backdrop-blur-md border border-border/80 shadow-2xl rounded-xl p-3 text-xs space-y-1.5 min-w-[200px]">
+                            <div className="font-semibold text-foreground border-b border-border/60 pb-1">
+                              Horizon: {label}
+                            </div>
+                            {payload.map((entry, idx) => (
+                              <div key={idx} className="flex justify-between items-center space-x-2">
+                                <span className="text-muted-foreground">{entry.name}:</span>
+                                <span className="font-mono font-bold text-foreground tabular-nums">
+                                  {typeof entry.value === "number" ? `${entry.value.toLocaleString()} MW` : "N/A"}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        );
+                      }
+                      return null;
+                    }}
                   />
                   <Legend wrapperStyle={{ fontSize: 11, paddingTop: 10 }} />
-                  <Bar dataKey="mae" name="MAE (MW)" fill="#059669" radius={[3, 3, 0, 0]} />
-                  <Bar dataKey="rmse" name="RMSE (MW)" fill="#7c3aed" radius={[3, 3, 0, 0]} />
+                  <Bar dataKey="mae" name="MAE (MW)" fill="#34c759" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="rmse" name="RMSE (MW)" fill="#af52de" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -287,7 +329,7 @@ export function AccuracyAnalysisView({
       </div>
 
       {/* Daily Breakdown Data Table */}
-      <Card className="shadow-xs">
+      <Card className="rounded-2xl border-border/70 shadow-xs">
         <CardHeader className="pb-3">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div>
@@ -302,7 +344,7 @@ export function AccuracyAnalysisView({
               variant="outline"
               size="sm"
               onClick={handleExportDailyCSV}
-              className="h-8 gap-1.5 text-xs cursor-pointer hover:bg-muted"
+              className="h-8 gap-1.5 text-xs cursor-pointer hover:bg-muted font-medium shadow-2xs"
               title="Download daily performance audit table as CSV"
             >
               <Download className="h-3.5 w-3.5 text-muted-foreground" />
@@ -327,15 +369,15 @@ export function AccuracyAnalysisView({
               <tbody className="divide-y divide-border font-mono text-[11px]">
                 {dailyData.map((d) => (
                   <tr key={d.date} className="hover:bg-muted/30 transition-colors">
-                    <td className="px-4 py-2.5 font-medium text-foreground">{d.date}</td>
-                    <td className="px-4 py-2.5 font-bold text-foreground">
+                    <td className="px-4 py-2.5 font-medium text-foreground tabular-nums">{d.date}</td>
+                    <td className="px-4 py-2.5 font-bold text-foreground tabular-nums">
                       {d.mae !== null ? `${d.mae.toLocaleString()} MW` : "N/A"}
                     </td>
-                    <td className="px-4 py-2.5 text-foreground">
+                    <td className="px-4 py-2.5 text-foreground tabular-nums">
                       {d.rmse !== null ? `${d.rmse.toLocaleString()} MW` : "N/A"}
                     </td>
                     <td
-                      className={`px-4 py-2.5 font-semibold ${
+                      className={`px-4 py-2.5 font-semibold tabular-nums ${
                         (d.meanBias ?? 0) > 0 ? "text-amber-600 dark:text-amber-400" : "text-indigo-600 dark:text-indigo-400"
                       }`}
                     >
@@ -355,10 +397,10 @@ export function AccuracyAnalysisView({
                         "--"
                       )}
                     </td>
-                    <td className="px-4 py-2.5 text-muted-foreground">
+                    <td className="px-4 py-2.5 text-muted-foreground tabular-nums">
                       {d.matchedCount} / {d.expectedCount}
                     </td>
-                    <td className="px-4 py-2.5 text-right font-medium">
+                    <td className="px-4 py-2.5 text-right font-medium tabular-nums">
                       {d.coveragePercentage}%
                     </td>
                   </tr>

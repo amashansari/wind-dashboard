@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import type { DeliveryInterval, ForecastsResponse, VintagesResponse } from "../types";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "./ui/card";
+import { Skeleton } from "./ui/skeleton";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { formatUKDateTime, formatUKTime } from "../lib/utils";
@@ -101,8 +102,8 @@ export function ForecastExplorerView({
   return (
     <div className="space-y-6">
       {/* Top Pedagogical & Integrity Callout */}
-      <div className="bg-primary/5 border border-primary/20 rounded-xl p-4 flex items-start space-x-3 text-xs shadow-2xs">
-        <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0 mt-0.5">
+      <div className="bg-primary/5 border border-primary/20 rounded-2xl p-5 flex items-start space-x-3 text-xs shadow-xs">
+        <div className="h-9 w-9 rounded-xl bg-primary/10 flex items-center justify-center text-primary shrink-0 mt-0.5">
           <Info className="h-4 w-4" />
         </div>
         <div className="space-y-1">
@@ -121,8 +122,8 @@ export function ForecastExplorerView({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left Column: Settlement Interval Selector Table */}
         <div className="lg:col-span-5 space-y-3">
-          <Card className="shadow-xs">
-            <CardHeader className="pb-3 space-y-2">
+          <Card className="rounded-2xl border-border/70 shadow-xs">
+            <CardHeader className="pb-3 space-y-2.5">
               <div className="flex items-center justify-between">
                 <div>
                   <CardTitle className="text-sm font-semibold">
@@ -132,25 +133,25 @@ export function ForecastExplorerView({
                     Hourly intervals in current scope
                   </CardDescription>
                 </div>
-                <Badge variant="outline" className="font-mono text-[10px]">
+                <Badge variant="outline" className="font-mono text-[10px] tabular-nums">
                   {filteredIntervals.length} / {intervals.length}
                 </Badge>
               </div>
 
               {/* Search filter input */}
               <div className="relative">
-                <Search className="h-3.5 w-3.5 absolute left-2.5 top-2.5 text-muted-foreground" />
+                <Search className="h-3.5 w-3.5 absolute left-3 top-2.5 text-muted-foreground" />
                 <input
                   type="text"
                   placeholder="Filter by date or period (e.g. 'Jan 03' or '24')..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full bg-muted/60 border border-input rounded-md pl-8 pr-3 py-1.5 text-xs placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary font-medium"
+                  className="w-full bg-muted/60 border border-border/70 rounded-xl pl-8.5 pr-3 py-1.5 text-xs placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 font-medium transition-all"
                 />
               </div>
             </CardHeader>
-            <CardContent className="p-0">
-              <div className="max-h-[560px] overflow-y-auto divide-y divide-border">
+            <CardContent className="p-1">
+              <div className="max-h-[560px] overflow-y-auto space-y-1 p-1">
                 {filteredIntervals.map((item) => {
                   const isSelected =
                     selectedInterval?.deliveryStartTime === item.deliveryStartTime;
@@ -159,10 +160,10 @@ export function ForecastExplorerView({
                       key={item.deliveryStartTime}
                       type="button"
                       onClick={() => onSelectInterval(item)}
-                      className={`w-full text-left px-3.5 py-2.5 transition-all flex items-center justify-between text-xs cursor-pointer ${
+                      className={`w-full text-left px-3 py-2.5 rounded-xl transition-all flex items-center justify-between text-xs cursor-pointer active:scale-[0.99] border ${
                         isSelected
-                          ? "bg-primary/10 border-l-4 border-primary font-medium"
-                          : "hover:bg-muted/50"
+                          ? "bg-primary/10 border-primary/30 font-medium shadow-2xs"
+                          : "border-transparent hover:bg-muted/60 hover:border-border/40"
                       }`}
                     >
                       <div className="space-y-0.5">
@@ -174,7 +175,7 @@ export function ForecastExplorerView({
                             </span>
                           )}
                         </div>
-                        <div className="text-[11px] text-muted-foreground font-mono">
+                        <div className="text-[11px] text-muted-foreground font-mono tabular-nums">
                           Outturn:{" "}
                           <span className="font-semibold text-emerald-600 dark:text-emerald-400">
                             {item.actualGenerationMW !== null
@@ -184,14 +185,14 @@ export function ForecastExplorerView({
                         </div>
                       </div>
                       <div className="text-right space-y-0.5">
-                        <div className="font-mono font-semibold text-amber-600 dark:text-amber-400">
+                        <div className="font-mono font-semibold text-amber-600 dark:text-amber-400 tabular-nums">
                           {item.forecastGenerationMW !== null
                             ? `${item.forecastGenerationMW.toLocaleString()} MW`
                             : "No forecast"}
                         </div>
                         {item.errorMW !== null ? (
                           <div
-                            className={`text-[11px] font-mono font-medium ${
+                            className={`text-[11px] font-mono font-medium tabular-nums ${
                               item.errorMW > 0 ? "text-amber-600 dark:text-amber-400" : "text-rose-600 dark:text-rose-400"
                             }`}
                           >
@@ -253,26 +254,26 @@ export function ForecastExplorerView({
                   </div>
                 </CardHeader>
                 <CardContent className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
-                  <div className="bg-muted/40 p-3 rounded-lg border border-border/40">
+                  <div className="bg-muted/40 p-3 rounded-xl border border-border/40">
                     <span className="text-muted-foreground block text-[11px]">Realized Outturn</span>
-                    <span className="text-lg font-bold font-mono text-emerald-600 dark:text-emerald-400">
+                    <span className="text-lg font-bold font-mono text-emerald-600 dark:text-emerald-400 tabular-nums">
                       {selectedInterval.actualGenerationMW !== null
                         ? `${selectedInterval.actualGenerationMW.toLocaleString()} MW`
                         : "N/A"}
                     </span>
                   </div>
-                  <div className="bg-muted/40 p-3 rounded-lg border border-border/40">
+                  <div className="bg-muted/40 p-3 rounded-xl border border-border/40">
                     <span className="text-muted-foreground block text-[11px]">Cutoff Forecast</span>
-                    <span className="text-lg font-bold font-mono text-amber-600 dark:text-amber-400">
+                    <span className="text-lg font-bold font-mono text-amber-600 dark:text-amber-400 tabular-nums">
                       {selectedInterval.forecastGenerationMW !== null
                         ? `${selectedInterval.forecastGenerationMW.toLocaleString()} MW`
                         : "N/A"}
                     </span>
                   </div>
-                  <div className="bg-muted/40 p-3 rounded-lg border border-border/40">
+                  <div className="bg-muted/40 p-3 rounded-xl border border-border/40">
                     <span className="text-muted-foreground block text-[11px]">Signed Error (F − A)</span>
                     <span
-                      className={`text-lg font-bold font-mono ${
+                      className={`text-lg font-bold font-mono tabular-nums ${
                         (selectedInterval.errorMW ?? 0) > 0 ? "text-amber-600 dark:text-amber-400" : "text-rose-600 dark:text-rose-400"
                       }`}
                     >
@@ -281,9 +282,9 @@ export function ForecastExplorerView({
                         : "N/A"}
                     </span>
                   </div>
-                  <div className="bg-muted/40 p-3 rounded-lg border border-border/40">
+                  <div className="bg-muted/40 p-3 rounded-xl border border-border/40">
                     <span className="text-muted-foreground block text-[11px]">Forecast Horizon</span>
-                    <span className="text-lg font-bold font-mono text-foreground">
+                    <span className="text-lg font-bold font-mono text-foreground tabular-nums">
                       {selectedInterval.leadTimeHours !== null
                         ? `${selectedInterval.leadTimeHours} hrs`
                         : "N/A"}
@@ -293,7 +294,7 @@ export function ForecastExplorerView({
               </Card>
 
               {/* Vintage Evolution Chart */}
-              <Card className="shadow-xs">
+              <Card className="rounded-2xl border-border/70 shadow-xs">
                 <CardHeader className="pb-2">
                   <div className="flex items-center justify-between">
                     <div>
@@ -313,28 +314,36 @@ export function ForecastExplorerView({
                 </CardHeader>
                 <CardContent>
                   <div className="h-[250px] w-full pt-2">
-                    {vintageChartData.length > 0 ? (
+                    {isLoadingVintages ? (
+                      <div className="space-y-3 h-full flex flex-col justify-center">
+                        <Skeleton className="h-4 w-52 rounded" />
+                        <Skeleton className="h-40 w-full rounded-xl" />
+                      </div>
+                    ) : vintageChartData.length > 0 ? (
                       <ResponsiveContainer width="100%" height="100%">
                         <LineChart
                           data={vintageChartData}
                           margin={{ top: 10, right: 20, left: 10, bottom: 20 }}
                         >
-                          <CartesianGrid strokeDasharray="3 3" opacity={0.25} />
+                          <CartesianGrid strokeDasharray="3 3" opacity={0.2} stroke="currentColor" className="text-border" />
                           <XAxis
                             dataKey="shortPublish"
                             tick={{ fontSize: 10 }}
-                            stroke="#888888"
+                            stroke="currentColor"
+                            className="text-muted-foreground"
                             label={{
                               value: "Publication Time (UTC)",
                               position: "insideBottom",
                               offset: -10,
                               fontSize: 10,
-                              fill: "#888888",
+                              fill: "currentColor",
+                              className: "text-muted-foreground",
                             }}
                           />
                           <YAxis
                             tick={{ fontSize: 10 }}
-                            stroke="#888888"
+                            stroke="currentColor"
+                            className="text-muted-foreground"
                             unit=" MW"
                             tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`}
                           />
@@ -343,37 +352,37 @@ export function ForecastExplorerView({
                               if (active && payload && payload.length) {
                                 const d = payload[0].payload;
                                 return (
-                                  <div className="bg-card border border-border p-3 rounded-lg shadow-xl text-xs space-y-1.5 min-w-[210px]">
-                                    <div className="font-bold text-foreground border-b border-border pb-1">
+                                  <div className="bg-card/95 backdrop-blur-md border border-border/80 p-3.5 rounded-xl shadow-2xl text-xs space-y-1.5 min-w-[220px]">
+                                    <div className="font-bold text-foreground border-b border-border/60 pb-1.5">
                                       Published: {d.publishTime}
                                     </div>
                                     <div className="text-muted-foreground">
                                       Horizon:{" "}
-                                      <span className="font-mono font-medium text-foreground">
+                                      <span className="font-mono font-medium text-foreground tabular-nums">
                                         {d.leadHours} hours prior
                                       </span>
                                     </div>
                                     <div className="flex justify-between items-center text-amber-600 dark:text-amber-400 font-medium">
                                       <span>Forecast:</span>
-                                      <span className="font-mono font-bold">
+                                      <span className="font-mono font-bold tabular-nums">
                                         {d.forecast.toLocaleString()} MW
                                       </span>
                                     </div>
                                     {d.actual && (
                                       <div className="flex justify-between items-center text-emerald-600 dark:text-emerald-400 font-medium">
                                         <span>Actual Outturn:</span>
-                                        <span className="font-mono font-bold">
+                                        <span className="font-mono font-bold tabular-nums">
                                           {d.actual.toLocaleString()} MW
                                         </span>
                                       </div>
                                     )}
-                                    <div className="pt-1 border-t border-border/50">
+                                    <div className="pt-1.5 border-t border-border/50">
                                       {d.isEligible ? (
-                                        <Badge variant="outline" className="text-emerald-600 border-emerald-500/30 bg-emerald-500/10 text-[10px]">
+                                        <Badge variant="outline" className="text-emerald-600 dark:text-emerald-400 border-emerald-500/30 bg-emerald-500/10 text-[10px]">
                                           Eligible at Gate Closure
                                         </Badge>
                                       ) : (
-                                        <Badge variant="outline" className="text-rose-500 border-rose-500/30 bg-rose-500/10 text-[10px]">
+                                        <Badge variant="outline" className="text-rose-500 dark:text-rose-400 border-rose-500/30 bg-rose-500/10 text-[10px]">
                                           Post-Cutoff Revision
                                         </Badge>
                                       )}
@@ -387,12 +396,12 @@ export function ForecastExplorerView({
                           {selectedInterval.actualGenerationMW !== null && (
                             <ReferenceLine
                               y={selectedInterval.actualGenerationMW}
-                              stroke="#059669"
+                              stroke="#34c759"
                               strokeWidth={2}
                               strokeDasharray="4 2"
                               label={{
                                 value: "Realized Outturn",
-                                fill: "#059669",
+                                fill: "#34c759",
                                 fontSize: 10,
                                 position: "top",
                               }}
@@ -402,9 +411,9 @@ export function ForecastExplorerView({
                             type="stepAfter"
                             dataKey="forecast"
                             name="Forecast"
-                            stroke="#d97706"
+                            stroke="#ff9500"
                             strokeWidth={2}
-                            dot={{ r: 4, strokeWidth: 1, fill: "#d97706" }}
+                            dot={{ r: 4, strokeWidth: 1, fill: "#ff9500" }}
                             activeDot={{ r: 6 }}
                           />
                         </LineChart>
@@ -421,7 +430,7 @@ export function ForecastExplorerView({
               </Card>
 
               {/* All Publication Vintages Table */}
-              <Card className="shadow-xs">
+              <Card className="rounded-2xl border-border/70 shadow-xs">
                 <CardHeader className="pb-2">
                   <div className="flex items-center justify-between">
                     <div>
@@ -432,7 +441,7 @@ export function ForecastExplorerView({
                         Every forecast update logged by National Grid ESO targeting this delivery window.
                       </CardDescription>
                     </div>
-                    <Badge variant="outline" className="font-mono text-[10px]">
+                    <Badge variant="outline" className="font-mono text-[10px] tabular-nums">
                       {selectedVintages?.vintages.length ?? 0} Vintages
                     </Badge>
                   </div>

@@ -56,10 +56,10 @@ export function ControlBar({
   ];
 
   return (
-    <div className="bg-card border-b border-border shadow-xs">
+    <div className="bg-card/90 backdrop-blur-md border-b border-border/70 shadow-2xs">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 text-xs">
         {/* Navigation Tabs */}
-        <div className="inline-flex rounded-lg bg-muted p-1 border border-border/50 shrink-0">
+        <div className="inline-flex rounded-xl bg-muted/70 p-1 border border-border/50 shrink-0">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -68,10 +68,10 @@ export function ControlBar({
                 key={tab.id}
                 type="button"
                 onClick={() => onTabChange(tab.id)}
-                className={`flex items-center space-x-1.5 px-3 py-1.5 text-xs font-semibold rounded-md transition-all cursor-pointer ${
+                className={`flex items-center space-x-1.5 px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-all cursor-pointer active:scale-[0.98] ${
                   isActive
                     ? "bg-card text-foreground shadow-xs font-bold"
-                    : "text-muted-foreground hover:text-foreground font-medium"
+                    : "text-muted-foreground hover:text-foreground hover:bg-card/40 font-medium"
                 }`}
               >
                 <Icon
@@ -94,7 +94,7 @@ export function ControlBar({
               <span className="hidden xl:inline">Delivery:</span>
             </div>
 
-            <div className="inline-flex rounded-md bg-muted p-0.5 border border-border/40">
+            <div className="inline-flex rounded-xl bg-muted/70 p-0.5 border border-border/50">
               {presets.map((p) => {
                 const isActive =
                   startDate === p.start && endDate === p.end && !showCustomDates;
@@ -106,9 +106,9 @@ export function ControlBar({
                       setShowCustomDates(false);
                       onDateChange(p.start, p.end);
                     }}
-                    className={`px-2 py-0.5 text-[11px] font-medium rounded transition-all cursor-pointer ${
+                    className={`px-2.5 py-1 text-[11px] font-medium rounded-lg transition-all cursor-pointer active:scale-[0.98] ${
                       isActive
-                        ? "bg-card text-foreground font-semibold shadow-xs"
+                        ? "bg-card text-foreground font-semibold shadow-2xs"
                         : "text-muted-foreground hover:text-foreground"
                     }`}
                   >
@@ -119,9 +119,9 @@ export function ControlBar({
               <button
                 type="button"
                 onClick={() => setShowCustomDates(!showCustomDates)}
-                className={`px-2 py-0.5 text-[11px] font-medium rounded transition-all cursor-pointer ${
+                className={`px-2.5 py-1 text-[11px] font-medium rounded-lg transition-all cursor-pointer active:scale-[0.98] ${
                   showCustomDates
-                    ? "bg-card text-foreground font-semibold shadow-xs"
+                    ? "bg-card text-foreground font-semibold shadow-2xs"
                     : "text-muted-foreground hover:text-foreground"
                 }`}
               >
@@ -133,7 +133,7 @@ export function ControlBar({
             {showCustomDates && (
               <form
                 onSubmit={handleApplyCustom}
-                className="flex items-center space-x-1 bg-muted/80 p-1 rounded-md border border-border animate-in fade-in-50"
+                className="flex items-center space-x-1.5 bg-card/95 backdrop-blur-md p-1.5 rounded-xl border border-border/70 shadow-md animate-in fade-in-50"
               >
                 <input
                   type="date"
@@ -141,7 +141,7 @@ export function ControlBar({
                   max="2026-01-31"
                   value={customStart}
                   onChange={(e) => setCustomStart(e.target.value)}
-                  className="bg-card border border-input rounded px-1.5 py-0.5 text-xs font-mono text-foreground"
+                  className="bg-muted/60 border border-input rounded-lg px-2 py-1 text-xs font-mono text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
                 />
                 <span className="text-muted-foreground font-mono">→</span>
                 <input
@@ -150,11 +150,11 @@ export function ControlBar({
                   max="2026-01-31"
                   value={customEnd}
                   onChange={(e) => setCustomEnd(e.target.value)}
-                  className="bg-card border border-input rounded px-1.5 py-0.5 text-xs font-mono text-foreground"
+                  className="bg-muted/60 border border-input rounded-lg px-2 py-1 text-xs font-mono text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
                 />
                 <button
                   type="submit"
-                  className="bg-primary text-primary-foreground font-medium px-2 py-0.5 rounded text-[11px] hover:bg-primary/90 cursor-pointer"
+                  className="bg-primary text-primary-foreground font-semibold px-2.5 py-1 rounded-lg text-[11px] hover:opacity-90 active:scale-[0.98] cursor-pointer shadow-2xs"
                 >
                   Apply
                 </button>
@@ -163,7 +163,7 @@ export function ControlBar({
           </div>
 
           {/* Decision Cutoff Selector */}
-          <div className="flex items-center space-x-1.5 pl-2 border-l border-border">
+          <div className="flex items-center space-x-1.5 pl-2.5 border-l border-border/60">
             <div className="flex items-center space-x-1 text-muted-foreground font-semibold uppercase tracking-wider text-[10px]">
               <Clock className="h-3.5 w-3.5 text-amber-500" />
               <span className="hidden lg:inline">Cutoff:</span>
@@ -171,7 +171,7 @@ export function ControlBar({
             <select
               value={cutoffPreset}
               onChange={(e) => onCutoffChange(e.target.value as CutoffPreset)}
-              className="bg-background border border-input text-foreground text-xs rounded-md px-2.5 py-1 font-medium focus:ring-1 focus:ring-primary focus:outline-none cursor-pointer shadow-2xs"
+              className="bg-card border border-border/70 text-foreground text-xs rounded-xl px-2.5 py-1 font-medium focus:ring-2 focus:ring-primary/20 focus:outline-none cursor-pointer shadow-2xs"
             >
               <option value="day_ahead_12">
                 Day-Ahead 12:00 UTC (D-1 Auction Gate)
@@ -186,7 +186,7 @@ export function ControlBar({
           </div>
 
           {/* Unit Badge */}
-          <div className="hidden sm:flex items-center space-x-1 pl-2 border-l border-border text-muted-foreground">
+          <div className="hidden sm:flex items-center space-x-1 pl-2.5 border-l border-border/60 text-muted-foreground">
             <SlidersHorizontal className="h-3.5 w-3.5" />
             <Badge
               variant="outline"

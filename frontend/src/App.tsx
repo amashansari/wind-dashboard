@@ -91,7 +91,7 @@ export default function App() {
       </main>
 
       {/* Governance & Compliance Footer */}
-      <footer className="border-t border-border bg-card/40 py-6 text-xs text-muted-foreground mt-auto">
+      <footer className="border-t border-border/70 bg-card/50 backdrop-blur-md py-6 text-xs text-muted-foreground mt-auto transition-colors">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-3 text-center md:text-left">
           <div className="space-y-1">
             <p className="font-semibold text-foreground">
