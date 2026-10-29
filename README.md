@@ -11,6 +11,8 @@
 
 A full-stack electricity procurement intelligence web application for UK energy utility day-ahead trading and risk management desks. The platform evaluates national wind generation forecasts and actual outturn data for **January 2026** directly from official Elexon Balancing Mechanism Reporting Service (BMRS) streams, strictly enforcing **look-ahead bias prevention** to reconstruct exact historical purchasing conditions.
 
+**Public Repository:** [https://github.com/amashansari/wind-dashboard](https://github.com/amashansari/wind-dashboard)
+
 ---
 
 ## Table of Contents
