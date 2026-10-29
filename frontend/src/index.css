@@ -2,33 +2,38 @@
 
 @layer base {
   :root {
-    --background: 220 25% 97%;
+    --background: 210 20% 98%;
     --foreground: 222 47% 11%;
     --card: 0 0% 100%;
     --card-foreground: 222 47% 11%;
     --popover: 0 0% 100%;
     --popover-foreground: 222 47% 11%;
-    --primary: 215 80% 45%;
+    --primary: 221 83% 53%;
     --primary-foreground: 210 40% 98%;
-    --secondary: 210 30% 93%;
+    --secondary: 210 25% 94%;
     --secondary-foreground: 222 47% 11%;
-    --muted: 210 30% 93%;
+    --muted: 210 20% 95%;
     --muted-foreground: 215 16% 47%;
-    --accent: 210 30% 90%;
+    --accent: 210 25% 92%;
     --accent-foreground: 222 47% 11%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
-    --ring: 215 80% 45%;
+    --border: 214 20% 89%;
+    --input: 214 20% 89%;
+    --ring: 221 83% 53%;
+
+    /* Dedicated Domain Tokens */
+    --actual-color: #059669;
+    --forecast-color: #d97706;
+    --revision-color: #3b82f6;
   }
 
   .dark {
     --background: 224 45% 9%;
     --foreground: 210 40% 98%;
-    --card: 224 40% 13%;
+    --card: 224 40% 12%;
     --card-foreground: 210 40% 98%;
-    --popover: 224 40% 13%;
+    --popover: 224 40% 12%;
     --popover-foreground: 210 40% 98%;
     --primary: 217 91% 60%;
     --primary-foreground: 222 47% 11%;
@@ -43,6 +48,10 @@
     --border: 217 33% 20%;
     --input: 217 33% 20%;
     --ring: 217 91% 60%;
+
+    --actual-color: #10b981;
+    --forecast-color: #f59e0b;
+    --revision-color: #60a5fa;
   }
 }
 
@@ -52,4 +61,32 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   margin: 0;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Tabular Numerals for Finance and Energy Metrics */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Custom Scrollbar for Dense Tables */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground) / 0.25);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.4);
+}
+
+/* Smooth Focus States */
+:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
 }
