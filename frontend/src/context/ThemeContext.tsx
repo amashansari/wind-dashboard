@@ -21,18 +21,17 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         return stored;
       }
     }
-    return "system";
+    return "dark";
   });
 
   const [resolvedTheme, setResolvedTheme] = useState<ResolvedTheme>(() => {
     if (typeof window !== "undefined") {
-      const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
       const stored = localStorage.getItem(THEME_STORAGE_KEY) as Theme | null;
       if (stored === "dark") return "dark";
       if (stored === "light") return "light";
-      return isDark ? "dark" : "light";
+      return "dark";
     }
-    return "light";
+    return "dark";
   });
 
   useEffect(() => {

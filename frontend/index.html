@@ -4,18 +4,24 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#161618" media="(prefers-color-scheme: dark)" />
-    <meta name="theme-color" content="#f5f5f7" media="(prefers-color-scheme: light)" />
-    <meta name="description" content="UK Wind Generation Day-Ahead Procurement Intelligence and Bias Analytics Pilot" />
-    <title>UK Wind Procurement Intelligence | Energy Analytics Dashboard</title>
+    <meta name="theme-color" content="#0B1220" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#F4F8FA" media="(prefers-color-scheme: light)" />
+    <meta name="description" content="Aerolytics — UK Wind Generation Procurement Intelligence & Day-Ahead Forecast Analytics" />
+    <title>Aerolytics | UK Wind Procurement Intelligence</title>
     <script>
       (function () {
         try {
           var stored = localStorage.getItem('wind-theme');
-          var isDark =
-            stored === 'dark' ||
-            ((!stored || stored === 'system') &&
-              window.matchMedia('(prefers-color-scheme: dark)').matches);
+          var isDark = false;
+          if (stored === 'light') {
+            isDark = false;
+          } else if (stored === 'dark') {
+            isDark = true;
+          } else if (stored === 'system') {
+            isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          } else {
+            isDark = true; // Default to signature dark mode
+          }
           if (isDark) {
             document.documentElement.classList.add('dark');
           } else {

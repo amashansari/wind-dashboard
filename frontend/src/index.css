@@ -1,76 +1,161 @@
 @import "tailwindcss";
 
-@variant dark (&:where(.dark, .dark *));
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+}
 
 @layer base {
   :root {
-    /* macOS Light Mode Tokens */
-    --background: 240 5% 96%;        /* #f5f5f7 Apple off-white canvas */
-    --foreground: 240 10% 12%;       /* #1d1d1f Deep charcoal text */
-    --card: 0 0% 100%;               /* #ffffff Clean card surface */
-    --card-foreground: 240 10% 12%;
+    /* 2026 Aerolytics Light Mode Tokens */
+    --background: 204 33% 97%;       /* #f4f8fa Crisp Airy Canvas */
+    --foreground: 221 47% 8%;         /* #0b1220 Midnight Navy Text */
+    --card: 0 0% 100%;                /* #ffffff Pure White Surface */
+    --card-foreground: 221 47% 8%;
     --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 12%;
-    --primary: 211 100% 45%;         /* #0071e3 Apple System Blue */
+    --popover-foreground: 221 47% 8%;
+    --primary: 161 76% 37%;          /* #16a477 Energy Emerald */
     --primary-foreground: 0 0% 100%;
-    --secondary: 240 5% 92%;         /* #eaeaea Soft surface */
-    --secondary-foreground: 240 10% 12%;
-    --muted: 240 5% 93%;             /* #ededf0 */
-    --muted-foreground: 240 4% 46%;  /* #86868b Subdued Apple gray */
-    --accent: 240 5% 90%;
-    --accent-foreground: 240 10% 12%;
+    --secondary: 204 30% 92%;        /* Soft cool surface */
+    --secondary-foreground: 221 47% 8%;
+    --muted: 204 25% 92%;
+    --muted-foreground: 212 25% 42%; /* #53697f */
+    --accent: 204 30% 88%;
+    --accent-foreground: 221 47% 8%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
-    --border: 240 6% 90%;            /* #e5e5ea Hairline border */
-    --input: 240 6% 90%;
-    --ring: 211 100% 45%;
+    --border: 204 20% 86%;           /* #dce7ee Hairline Border */
+    --input: 204 20% 86%;
+    --ring: 161 76% 37%;
 
-    /* Apple Domain Specific Color Tokens */
-    --actual-color: #34c759;
-    --forecast-color: #ff9500;
-    --revision-color: #0071e3;
+    /* Aerolytics Domain Color Tokens */
+    --color-midnight: #0b1220;
+    --color-surface: #ffffff;
+    --actual-color: #16a477;         /* Emerald */
+    --forecast-color: #0284c7;       /* Cyan-Blue */
+    --lime-color: #65a30d;
+    --amber-color: #d97706;
   }
 
   .dark {
-    /* macOS Dark Mode Tokens */
-    --background: 240 6% 9%;         /* #161618 Deep dark slate */
-    --foreground: 0 0% 98%;          /* #f5f5f7 Crisp text */
-    --card: 240 5% 12%;              /* #1c1c1e Elevated dark card */
-    --card-foreground: 0 0% 98%;
-    --popover: 240 5% 14%;           /* #232326 */
-    --popover-foreground: 0 0% 98%;
-    --primary: 211 100% 52%;         /* #0a84ff Dark System Blue */
+    /* 2026 Aerolytics Signature Dark Midnight Navy Tokens */
+    --background: 221 47% 8%;        /* #0b1220 Midnight Navy Canvas */
+    --foreground: 208 80% 96%;       /* #ebf4fc Crisp White-Cyan Text */
+    --card: 208 48% 15%;             /* #14283a Deep Blue Surface */
+    --card-foreground: 208 80% 96%;
+    --popover: 208 48% 15%;          /* #14283a */
+    --popover-foreground: 208 80% 96%;
+    --primary: 161 76% 37%;          /* #16a477 Energy Emerald */
     --primary-foreground: 0 0% 100%;
-    --secondary: 240 5% 18%;         /* #2c2c2e */
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 5% 18%;             /* #2c2c2e */
-    --muted-foreground: 240 5% 65%;  /* #98989d */
-    --accent: 240 5% 22%;            /* #38383a */
-    --accent-foreground: 0 0% 98%;
+    --secondary: 212 40% 18%;        /* #1b2f44 Elevated Surface */
+    --secondary-foreground: 208 80% 96%;
+    --muted: 212 40% 18%;            /* #1b2f44 */
+    --muted-foreground: 213 25% 72%; /* #a7b7ca Cool Slate */
+    --accent: 210 50% 22%;           /* #1e354d */
+    --accent-foreground: 208 80% 96%;
     --destructive: 0 72% 51%;        /* #ff453a */
     --destructive-foreground: 0 0% 100%;
-    --border: 240 5% 20%;            /* #323236 Hairline border */
-    --input: 240 5% 20%;
-    --ring: 211 100% 52%;
+    --border: 212 35% 22%;           /* #1e354d Hairline Cyan-Blue Border */
+    --input: 212 35% 22%;
+    --ring: 161 76% 37%;
 
-    /* Apple Domain Specific Color Tokens */
-    --actual-color: #30d158;
-    --forecast-color: #ff9f0a;
-    --revision-color: #0a84ff;
+    /* Aerolytics Domain Color Tokens */
+    --color-midnight: #0b1220;
+    --color-surface: #14283a;
+    --actual-color: #16a477;         /* Emerald */
+    --forecast-color: #59c8e8;       /* Ice Cyan */
+    --lime-color: #b7f36b;           /* Electric Lime */
+    --amber-color: #f5b84b;          /* Warm Amber */
   }
 }
 
 body {
   background-color: hsl(var(--background));
   color: hsl(var(--foreground));
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", "Helvetica Neue", sans-serif;
   margin: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition: background-color 0.25s ease, color 0.25s ease;
+  overflow-x: hidden;
 }
 
-/* Tabular Numerals for Energy and Date Metrics */
+/* Liquid Glass Utilities */
+.liquid-glass {
+  background-color: rgba(20, 40, 58, 0.72);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(89, 200, 232, 0.18);
+  box-shadow: 0 10px 30px -5px rgba(11, 18, 32, 0.45);
+}
+
+:root:not(.dark) .liquid-glass {
+  background-color: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(22, 164, 119, 0.16);
+  box-shadow: 0 8px 24px -4px rgba(20, 40, 58, 0.08);
+}
+
+.liquid-glass-subtle {
+  background-color: rgba(20, 40, 58, 0.45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+:root:not(.dark) .liquid-glass-subtle {
+  background-color: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(20, 40, 58, 0.08);
+}
+
+/* Atmospheric Glow & Hero Accents */
+.ambient-glow-emerald {
+  box-shadow: 0 0 28px -4px rgba(22, 164, 119, 0.28);
+}
+
+.ambient-glow-cyan {
+  box-shadow: 0 0 28px -4px rgba(89, 200, 232, 0.28);
+}
+
+.ambient-glow-lime {
+  box-shadow: 0 0 28px -4px rgba(183, 243, 107, 0.25);
+}
+
+.hero-landscape-gradient {
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(22, 164, 119, 0.18) 0%, rgba(89, 200, 232, 0.12) 35%, transparent 70%),
+    linear-gradient(180deg, rgba(20, 40, 58, 0.6) 0%, rgba(11, 18, 32, 0.95) 100%);
+}
+
+:root:not(.dark) .hero-landscape-gradient {
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(22, 164, 119, 0.14) 0%, rgba(89, 200, 232, 0.1) 40%, transparent 70%),
+    linear-gradient(180deg, rgba(244, 248, 250, 0.8) 0%, rgba(244, 248, 250, 1) 100%);
+}
+
+/* Tabular Numerals for Finance and Energy Metrics */
 .tabular-nums {
   font-variant-numeric: tabular-nums;
 }
@@ -99,10 +184,10 @@ body {
   transform: translateX(-100%);
   background-image: linear-gradient(
     90deg,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.12) 20%,
-    rgba(255, 255, 255, 0.25) 60%,
-    rgba(255, 255, 255, 0)
+    rgba(89, 200, 232, 0) 0%,
+    rgba(89, 200, 232, 0.08) 20%,
+    rgba(89, 200, 232, 0.18) 60%,
+    rgba(89, 200, 232, 0)
   );
   animation: shimmer 1.8s infinite;
   content: "";
@@ -111,10 +196,10 @@ body {
 .dark .animate-shimmer::after {
   background-image: linear-gradient(
     90deg,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.04) 20%,
-    rgba(255, 255, 255, 0.08) 60%,
-    rgba(255, 255, 255, 0)
+    rgba(89, 200, 232, 0) 0%,
+    rgba(89, 200, 232, 0.05) 20%,
+    rgba(89, 200, 232, 0.12) 60%,
+    rgba(89, 200, 232, 0)
   );
 }
 
@@ -133,15 +218,16 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: hsl(var(--muted-foreground) / 0.25);
+  background: rgba(89, 200, 232, 0.2);
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--muted-foreground) / 0.4);
+  background: rgba(89, 200, 232, 0.35);
 }
 
 /* Smooth Focus States */
 :focus-visible {
-  outline: 2px solid hsl(var(--ring));
+  outline: 2px solid #59c8e8;
   outline-offset: 2px;
 }
+
