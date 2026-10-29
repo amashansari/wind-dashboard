@@ -1,9 +1,10 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional
 from fastapi import APIRouter, Query, HTTPException
 from dateutil import parser
 from backend.app.schemas.forecast import ForecastsResponse, VintagesResponse
 from backend.app.services.repository import repository
+from backend.app.api.validation import validate_date_range_and_cutoff, VALID_CUTOFF_PRESETS
 
 router = APIRouter(tags=["Forecasts"])
 
@@ -14,10 +15,12 @@ def get_forecasts(
     cutoffPreset: str = Query("day_ahead_12", description="Cutoff preset: day_ahead_12, day_ahead_17, same_day_06"),
     customCutoff: Optional[str] = Query(None, description="Optional custom cutoff ISO timestamp")
 ):
-    try:
-        custom_dt = parser.isoparse(customCutoff) if customCutoff else None
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=f"Invalid customCutoff timestamp: {e}")
+    _, _, custom_dt = validate_date_range_and_cutoff(
+        start_date_str=startDate,
+        end_date_str=endDate,
+        cutoff_preset=cutoffPreset,
+        custom_cutoff_str=customCutoff
+    )
 
     intervals, cutoff_applied = repository.get_forecasts_and_actuals(
         start_date_str=startDate,
@@ -45,13 +48,31 @@ def get_vintages(
 ):
     try:
         delivery_dt = parser.isoparse(deliveryTime)
+        if delivery_dt.tzinfo is None:
+            delivery_dt = delivery_dt.replace(tzinfo=timezone.utc)
     except Exception as e:
-        raise HTTPException(status_code=400, detail=f"Invalid deliveryTime timestamp: {e}")
+        raise HTTPException(
+            status_code=400,
+            detail=f"Invalid deliveryTime timestamp '{deliveryTime}'. Expected ISO 8601 format: {e}"
+        )
 
-    try:
-        custom_dt = parser.isoparse(customCutoff) if customCutoff else None
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=f"Invalid customCutoff timestamp: {e}")
+    if cutoffPreset not in VALID_CUTOFF_PRESETS:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Invalid cutoffPreset '{cutoffPreset}'. Must be one of: {sorted(list(VALID_CUTOFF_PRESETS))}."
+        )
+
+    custom_dt = None
+    if customCutoff:
+        try:
+            custom_dt = parser.isoparse(customCutoff)
+            if custom_dt.tzinfo is None:
+                custom_dt = custom_dt.replace(tzinfo=timezone.utc)
+        except Exception as e:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Invalid customCutoff timestamp '{customCutoff}': {e}"
+            )
 
     vintages_data = repository.get_vintages_for_interval(
         target_delivery_time=delivery_dt,

@@ -51,6 +51,9 @@ def test_accuracy_endpoint(client):
     assert data["rmse"] is not None
     assert data["meanBias"] is not None
     assert len(data["dailyBreakdown"]) == 3
+    # 3 days * 24 hours = 72 expected intervals
+    assert data["expectedIntervalCount"] == 72
+    assert data["coveragePercentage"] > 0.0
 
 def test_lead_times_endpoint(client):
     response = client.get("/api/analytics/lead-times?startDate=2026-01-01&endDate=2026-01-07")
@@ -66,3 +69,30 @@ def test_vintages_endpoint(client):
     assert len(data["vintages"]) > 0
     # Check that isEligibleAtCutoff is boolean
     assert isinstance(data["vintages"][0]["isEligibleAtCutoff"], bool)
+
+# --- Regression & Edge Case Tests ---
+
+def test_invalid_start_date_returns_400(client):
+    response = client.get("/api/forecasts?startDate=not-a-date&endDate=2026-01-07")
+    assert response.status_code == 400
+    assert "Invalid startDate" in response.json()["detail"]
+
+def test_invalid_end_date_returns_400(client):
+    response = client.get("/api/analytics/accuracy?startDate=2026-01-01&endDate=bad-date")
+    assert response.status_code == 400
+    assert "Invalid endDate" in response.json()["detail"]
+
+def test_inverted_date_range_returns_400(client):
+    response = client.get("/api/forecasts?startDate=2026-01-10&endDate=2026-01-05")
+    assert response.status_code == 400
+    assert "cannot be after endDate" in response.json()["detail"]
+
+def test_invalid_cutoff_preset_returns_400(client):
+    response = client.get("/api/forecasts?startDate=2026-01-01&endDate=2026-01-07&cutoffPreset=unauthorized_preset")
+    assert response.status_code == 400
+    assert "Invalid cutoffPreset" in response.json()["detail"]
+
+def test_invalid_delivery_time_in_vintages_returns_400(client):
+    response = client.get("/api/vintages?deliveryTime=invalid-time-format")
+    assert response.status_code == 400
+    assert "Invalid deliveryTime" in response.json()["detail"]

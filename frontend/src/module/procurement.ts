@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import type { CutoffPreset, DeliveryInterval } from "../types";
 import {
   fetchAccuracyAction,
@@ -44,6 +44,10 @@ export function useProcurement() {
     setError,
   } = useProcurementStore();
 
+  // Race condition guards for concurrent async dispatches
+  const dataRequestIdRef = useRef<number>(0);
+  const vintageRequestIdRef = useRef<number>(0);
+
   const loadInitialMetadata = useCallback(async () => {
     try {
       const [healthRes, metaRes] = await Promise.all([
@@ -58,14 +62,22 @@ export function useProcurement() {
   }, [setHealth, setMetadata]);
 
   const loadData = useCallback(async () => {
+    const currentRequestId = ++dataRequestIdRef.current;
     setIsLoading(true);
     setError(null);
+
     try {
       const [forecastsRes, accuracyRes, leadTimesRes] = await Promise.all([
         fetchForecastsAction(startDate, endDate, cutoffPreset, customCutoff),
         fetchAccuracyAction(startDate, endDate, cutoffPreset, customCutoff),
         fetchLeadTimesAction(startDate, endDate, cutoffPreset),
       ]);
+
+      // Guard against stale response if a newer query was initiated in the meantime
+      if (currentRequestId !== dataRequestIdRef.current) {
+        return;
+      }
+
       setForecastData(forecastsRes);
       setAccuracyData(accuracyRes);
       setLeadTimeData(leadTimesRes);
@@ -77,10 +89,15 @@ export function useProcurement() {
         setSelectedInterval(null);
       }
     } catch (err) {
+      if (currentRequestId !== dataRequestIdRef.current) {
+        return;
+      }
       const msg = err instanceof Error ? err.message : "Failed to load procurement data.";
       setError(msg);
     } finally {
-      setIsLoading(false);
+      if (currentRequestId === dataRequestIdRef.current) {
+        setIsLoading(false);
+      }
     }
   }, [
     startDate,
@@ -97,20 +114,32 @@ export function useProcurement() {
 
   const inspectInterval = useCallback(
     async (interval: DeliveryInterval) => {
+      const currentVintageReq = ++vintageRequestIdRef.current;
       setSelectedInterval(interval);
       setIsLoadingVintages(true);
+
       try {
         const vintagesRes = await fetchVintagesAction(
           interval.deliveryStartTime,
           cutoffPreset,
           customCutoff
         );
+
+        if (currentVintageReq !== vintageRequestIdRef.current) {
+          return;
+        }
+
         setSelectedVintages(vintagesRes);
       } catch (err) {
+        if (currentVintageReq !== vintageRequestIdRef.current) {
+          return;
+        }
         console.error("Failed to load vintages:", err);
         setSelectedVintages(null);
       } finally {
-        setIsLoadingVintages(false);
+        if (currentVintageReq === vintageRequestIdRef.current) {
+          setIsLoadingVintages(false);
+        }
       }
     },
     [cutoffPreset, customCutoff, setSelectedInterval, setSelectedVintages, setIsLoadingVintages]

@@ -1,6 +1,6 @@
 import os
 from pathlib import Path
-from typing import List, Union
+from typing import List, Optional, Union
 from pydantic import field_validator
 from pydantic_settings import BaseSettings
 
@@ -9,14 +9,16 @@ class Settings(BaseSettings):
     VERSION: str = "1.0.0"
     API_PREFIX: str = "/api"
     
-    # CORS Origins (comma separated string or list)
+    # Exact CORS Origins
     CORS_ORIGINS: Union[List[str], str] = [
         "http://localhost:5173",
         "http://127.0.0.1:5173",
         "http://localhost:3000",
         "http://localhost:80",
-        "https://*.vercel.app"
     ]
+    
+    # Regular expression for matching preview & production Vercel domains
+    CORS_ORIGIN_REGEX: Optional[str] = r"^https:\/\/.*\.vercel\.app$"
 
     @field_validator("CORS_ORIGINS", mode="before")
     def parse_cors_origins(cls, v):

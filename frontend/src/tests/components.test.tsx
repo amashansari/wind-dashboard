@@ -5,7 +5,9 @@ import { Header } from "../components/Header";
 import { ControlBar } from "../components/ControlBar";
 import { EmptyState } from "../components/EmptyState";
 import { OverviewView } from "../components/OverviewView";
-import type { AccuracyResponse, ForecastsResponse } from "../types";
+import { AccuracyAnalysisView } from "../components/AccuracyAnalysisView";
+import { ForecastExplorerView } from "../components/ForecastExplorerView";
+import type { AccuracyResponse, ForecastsResponse, LeadTimesResponse, VintagesResponse } from "../types";
 
 describe("Frontend Component Suite", () => {
   it("renders Header brand and status correctly", () => {
@@ -116,5 +118,147 @@ describe("Frontend Component Suite", () => {
     expect(screen.getByText("1,120.4 MW")).toBeInTheDocument();
     expect(screen.getByText("+320 MW")).toBeInTheDocument();
     expect(screen.getByText("Overforecast")).toBeInTheDocument();
+  });
+
+  it("renders AccuracyAnalysisView methodology and daily audit table", () => {
+    const mockAccuracy: AccuracyResponse = {
+      startDate: "2026-01-01",
+      endDate: "2026-01-02",
+      cutoffPolicy: "Day-Ahead 12:00 UTC",
+      generationUnit: "MW",
+      matchedSampleCount: 48,
+      expectedIntervalCount: 48,
+      coveragePercentage: 100,
+      mae: 750.0,
+      rmse: 920.0,
+      meanBias: 150.0,
+      biasInterpretation: "Overforecasting by 150.0 MW on average",
+      dailyBreakdown: [
+        {
+          date: "2026-01-01",
+          mae: 700.0,
+          rmse: 850.0,
+          meanBias: 120.0,
+          matchedCount: 24,
+          expectedCount: 24,
+          coveragePercentage: 100.0,
+        },
+        {
+          date: "2026-01-02",
+          mae: 800.0,
+          rmse: 990.0,
+          meanBias: 180.0,
+          matchedCount: 24,
+          expectedCount: 24,
+          coveragePercentage: 100.0,
+        },
+      ],
+    };
+
+    const mockLeadTime: LeadTimesResponse = {
+      startDate: "2026-01-01",
+      endDate: "2026-01-02",
+      buckets: [
+        {
+          bucketName: "Intraday (1-4h)",
+          minLeadHours: 0.0,
+          maxLeadHours: 4.0,
+          mae: 350.0,
+          rmse: 420.0,
+          meanBias: 50.0,
+          sampleCount: 12,
+        },
+        {
+          bucketName: "Multi-Day Ahead (>24h)",
+          minLeadHours: 24.0,
+          maxLeadHours: 999.0,
+          mae: 1400.0,
+          rmse: 1750.0,
+          meanBias: 300.0,
+          sampleCount: 12,
+        },
+      ],
+    };
+
+    render(
+      <AccuracyAnalysisView
+        accuracyData={mockAccuracy}
+        leadTimeData={mockLeadTime}
+      />
+    );
+
+    expect(screen.getByText("Methodological Standards & Market Boundary Disclosures")).toBeInTheDocument();
+    expect(screen.getByText(/Exclusion of MAPE/)).toBeInTheDocument();
+    expect(screen.getByText("Best Forecast Day")).toBeInTheDocument();
+    expect(screen.getByText("4.0x Expansion")).toBeInTheDocument();
+  });
+
+  it("renders ForecastExplorerView and supports interval filtering", () => {
+    const mockForecast: ForecastsResponse = {
+      startDate: "2026-01-01",
+      endDate: "2026-01-01",
+      cutoffPolicyApplied: "Day-Ahead 12:00 UTC",
+      totalIntervals: 2,
+      matchedIntervals: 2,
+      intervals: [
+        {
+          deliveryStartTime: "2026-01-01T08:00:00Z",
+          settlementPeriod: 17,
+          actualGenerationMW: 9000,
+          forecastGenerationMW: 9500,
+          forecastPublishTime: "2025-12-31T11:00:00Z",
+          leadTimeHours: 21.0,
+          errorMW: 500,
+          absoluteErrorMW: 500,
+          isMatched: true,
+        },
+        {
+          deliveryStartTime: "2026-01-01T20:00:00Z",
+          settlementPeriod: 41,
+          actualGenerationMW: 14000,
+          forecastGenerationMW: 14200,
+          forecastPublishTime: "2025-12-31T11:00:00Z",
+          leadTimeHours: 33.0,
+          errorMW: 200,
+          absoluteErrorMW: 200,
+          isMatched: true,
+        },
+      ],
+    };
+
+    const mockVintages: VintagesResponse = {
+      deliveryStartTime: "2026-01-01T08:00:00Z",
+      cutoffApplied: "2025-12-31T12:00:00Z",
+      selectedPublishTime: "2025-12-31T11:00:00Z",
+      vintages: [
+        {
+          publishTime: "2025-12-31T11:00:00Z",
+          leadTimeHours: 21.0,
+          forecastGenerationMW: 9500,
+          isEligibleAtCutoff: true,
+        },
+      ],
+    };
+
+    const handleSelectInterval = vi.fn();
+
+    render(
+      <ForecastExplorerView
+        forecastData={mockForecast}
+        selectedInterval={mockForecast.intervals[0]}
+        selectedVintages={mockVintages}
+        isLoadingVintages={false}
+        onSelectInterval={handleSelectInterval}
+      />
+    );
+
+    expect(screen.getByText("Forecast Vintage Traceability & Gate-Closure Guard")).toBeInTheDocument();
+    expect(screen.getByText("Settlement Period 17")).toBeInTheDocument();
+
+    // Test filter input
+    const filterInput = screen.getByPlaceholderText(/Filter by date or period/);
+    fireEvent.change(filterInput, { target: { value: "41" } });
+    expect(screen.queryByText(/SP 17/)).not.toBeInTheDocument();
+    expect(screen.getByText(/SP 41/)).toBeInTheDocument();
   });
 });

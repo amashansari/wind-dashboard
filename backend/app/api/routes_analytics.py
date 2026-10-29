@@ -1,11 +1,11 @@
 from datetime import datetime
 from typing import Optional, List, Dict
 from fastapi import APIRouter, Query, HTTPException
-from dateutil import parser
 from backend.app.schemas.analytics import AccuracyResponse, DailyAccuracyItem, LeadTimesResponse
 from backend.app.services.repository import repository
 from backend.app.analytics.metrics import calculate_accuracy_metrics
 from backend.app.analytics.lead_time import calculate_lead_time_analytics
+from backend.app.api.validation import validate_date_range_and_cutoff
 
 router = APIRouter(tags=["Analytics"])
 
@@ -16,10 +16,12 @@ def get_accuracy(
     cutoffPreset: str = Query("day_ahead_12", description="Cutoff preset: day_ahead_12, day_ahead_17, same_day_06"),
     customCutoff: Optional[str] = Query(None, description="Optional custom cutoff ISO timestamp")
 ):
-    try:
-        custom_dt = parser.isoparse(customCutoff) if customCutoff else None
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=f"Invalid customCutoff timestamp: {e}")
+    start_dt, end_dt, custom_dt = validate_date_range_and_cutoff(
+        start_date_str=startDate,
+        end_date_str=endDate,
+        cutoff_preset=cutoffPreset,
+        custom_cutoff_str=customCutoff
+    )
 
     intervals, cutoff_applied = repository.get_forecasts_and_actuals(
         start_date_str=startDate,
@@ -35,11 +37,7 @@ def get_accuracy(
         if item["isMatched"]
     ]
 
-    # Calculate overall metrics
-    # Expected count is based on number of hourly delivery intervals (24 per day)
-    overall_metrics = calculate_accuracy_metrics(matched_pairs)
-
-    # Compute daily breakdown
+    # Calculate daily breakdown
     daily_groups: Dict[str, List] = {}
     for item in intervals:
         date_str = item["deliveryStartTime"].strftime("%Y-%m-%d")
@@ -63,13 +61,19 @@ def get_accuracy(
             coveragePercentage=d_metrics["coveragePercentage"]
         ))
 
+    # Calculate overall metrics with rigorous expected interval count
+    # 24 hourly intervals per calendar day in range
+    days_in_scope = (end_dt.date() - start_dt.date()).days + 1
+    total_expected_count = max(days_in_scope * 24, len(daily_breakdown) * 24)
+    overall_metrics = calculate_accuracy_metrics(matched_pairs, expected_count=total_expected_count)
+
     return AccuracyResponse(
         startDate=startDate,
         endDate=endDate,
         cutoffPolicy=cutoff_applied,
         generationUnit="MW",
         matchedSampleCount=overall_metrics["matchedCount"],
-        expectedIntervalCount=len(daily_breakdown) * 24 if daily_breakdown else overall_metrics["matchedCount"],
+        expectedIntervalCount=total_expected_count,
         coveragePercentage=overall_metrics["coveragePercentage"],
         mae=overall_metrics["mae"],
         rmse=overall_metrics["rmse"],
@@ -84,6 +88,12 @@ def get_lead_times(
     endDate: str = Query(..., description="End date in YYYY-MM-DD format (e.g. 2026-01-31)"),
     cutoffPreset: str = Query("day_ahead_12", description="Cutoff preset: day_ahead_12, day_ahead_17, same_day_06")
 ):
+    validate_date_range_and_cutoff(
+        start_date_str=startDate,
+        end_date_str=endDate,
+        cutoff_preset=cutoffPreset
+    )
+
     intervals, _ = repository.get_forecasts_and_actuals(
         start_date_str=startDate,
         end_date_str=endDate,

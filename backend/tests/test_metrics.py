@@ -56,25 +56,61 @@ def test_empty_pairs():
     assert res["rmse"] is None
     assert res["meanBias"] is None
 
+def test_coverage_calculation_precision():
+    """Verify coverage calculation with partial matched pairs."""
+    pairs = [(1000.0, 950.0)] * 12
+    res = calculate_accuracy_metrics(pairs, expected_count=24)
+    assert res["matchedCount"] == 12
+    assert res["expectedCount"] == 24
+    assert res["coveragePercentage"] == 50.0
+
 def test_lead_time_bucketing():
     """Verify grouping into standard lead-time buckets."""
     observations = [
         {"leadTimeHours": 2.5, "forecastGenerationMW": 1000.0, "actualGenerationMW": 950.0}, # Intraday (1-4h)
         {"leadTimeHours": 8.0, "forecastGenerationMW": 2000.0, "actualGenerationMW": 1800.0}, # Near Day-Ahead (4-12h)
         {"leadTimeHours": 18.0, "forecastGenerationMW": 3000.0, "actualGenerationMW": 3100.0}, # Day-Ahead Auction (12-24h)
-        {"leadTimeHours": 36.0, "forecastGenerationMW": 4000.0, "actualGenerationMW": 3500.0}, # Multi-Day Ahead (24-48h)
+        {"leadTimeHours": 36.0, "forecastGenerationMW": 4000.0, "actualGenerationMW": 3500.0}, # Multi-Day Ahead (>24h)
     ]
 
     buckets = calculate_lead_time_analytics(observations)
     assert len(buckets) == 4
 
     # Bucket 1: Intraday
-    b1 = next(b for b in buckets if b["bucketName"] == "Intraday (1-4h)")
+    b1 = next(b for b in buckets if "Intraday" in b["bucketName"])
     assert b1["sampleCount"] == 1
     assert b1["mae"] == 50.0
 
     # Bucket 3: Day-Ahead Auction
-    b3 = next(b for b in buckets if b["bucketName"] == "Day-Ahead Auction (12-24h)")
+    b3 = next(b for b in buckets if "Day-Ahead Auction" in b["bucketName"])
     assert b3["sampleCount"] == 1
     assert b3["mae"] == 100.0
     assert b3["meanBias"] == -100.0
+
+def test_lead_time_boundary_disjointness():
+    """
+    Verify that an observation right on the boundary (e.g. 4.0h) is placed
+    into exactly one bucket and not double-counted.
+    """
+    obs = [{"leadTimeHours": 4.0, "forecastGenerationMW": 1500.0, "actualGenerationMW": 1400.0}]
+    buckets = calculate_lead_time_analytics(obs)
+
+    b1 = next(b for b in buckets if "Intraday" in b["bucketName"])
+    b2 = next(b for b in buckets if "Near Day-Ahead" in b["bucketName"])
+
+    assert b1["sampleCount"] == 0 # 4.0 is not in [0, 4)
+    assert b2["sampleCount"] == 1 # 4.0 is in [4, 12)
+
+def test_sub_hour_and_extended_lead_times():
+    """Verify that lead time < 1h and lead time > 48h are both properly categorized."""
+    obs = [
+        {"leadTimeHours": 0.5, "forecastGenerationMW": 500.0, "actualGenerationMW": 480.0},
+        {"leadTimeHours": 72.0, "forecastGenerationMW": 3000.0, "actualGenerationMW": 2500.0},
+    ]
+    buckets = calculate_lead_time_analytics(obs)
+
+    b_sub = next(b for b in buckets if "Intraday" in b["bucketName"])
+    b_multi = next(b for b in buckets if "Multi-Day" in b["bucketName"])
+
+    assert b_sub["sampleCount"] == 1
+    assert b_multi["sampleCount"] == 1

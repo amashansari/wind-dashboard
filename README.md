@@ -7,7 +7,8 @@
 [![Vite](https://img.shields.io/badge/Vite-6.0-646cff.svg)](https://vitejs.dev/)
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-v4-38bdf8.svg)](https://tailwindcss.com/)
 [![Docker](https://img.shields.io/badge/Docker-Compose-2496ed.svg)](https://www.docker.com/)
-[![Tests](https://img.shields.io/badge/Tests-22%20Passed-success.svg)]()
+[![CI](https://github.com/amashansari/wind-dashboard/actions/workflows/ci.yml/badge.svg)](https://github.com/amashansari/wind-dashboard/actions)
+[![Tests](https://img.shields.io/badge/Tests-38%20Passed-success.svg)]()
 
 A full-stack electricity procurement intelligence web application for UK energy utility day-ahead trading and risk management desks. The platform evaluates national wind generation forecasts and actual outturn data for **January 2026** directly from official Elexon Balancing Mechanism Reporting Service (BMRS) streams, strictly enforcing **look-ahead bias prevention** to reconstruct exact historical purchasing conditions.
 
@@ -236,41 +237,49 @@ docker compose down
 ## Running Tests
 
 ### Backend Tests (`pytest`)
-Run the 15 backend automated tests:
+Run the 23 backend automated tests:
 ```bash
 pytest -v backend/tests
 ```
 **Test Results:**
 ```text
-backend/tests/test_api.py::test_health_endpoint PASSED                   [  6%]
-backend/tests/test_api.py::test_metadata_endpoint PASSED                 [ 13%]
-backend/tests/test_api.py::test_forecasts_endpoint PASSED                [ 20%]
-backend/tests/test_api.py::test_accuracy_endpoint PASSED                 [ 26%]
-backend/tests/test_api.py::test_lead_times_endpoint PASSED               [ 33%]
-backend/tests/test_api.py::test_vintages_endpoint PASSED                 [ 40%]
-backend/tests/test_metrics.py::test_hand_calculated_metrics PASSED       [ 46%]
-backend/tests/test_metrics.py::test_positive_bias_overforecasting PASSED [ 53%]
+backend/tests/test_api.py::test_health_endpoint PASSED                   [  4%]
+backend/tests/test_api.py::test_metadata_endpoint PASSED                 [  8%]
+backend/tests/test_api.py::test_forecasts_endpoint PASSED                [ 13%]
+backend/tests/test_api.py::test_accuracy_endpoint PASSED                 [ 17%]
+backend/tests/test_api.py::test_lead_times_endpoint PASSED               [ 21%]
+backend/tests/test_api.py::test_vintages_endpoint PASSED                 [ 26%]
+backend/tests/test_api.py::test_invalid_start_date_returns_400 PASSED    [ 30%]
+backend/tests/test_api.py::test_invalid_end_date_returns_400 PASSED      [ 34%]
+backend/tests/test_api.py::test_inverted_date_range_returns_400 PASSED   [ 39%]
+backend/tests/test_api.py::test_invalid_cutoff_preset_returns_400 PASSED [ 43%]
+backend/tests/test_api.py::test_invalid_delivery_time_in_vintages_returns_400 PASSED [ 47%]
+backend/tests/test_metrics.py::test_hand_calculated_metrics PASSED       [ 52%]
+backend/tests/test_metrics.py::test_positive_bias_overforecasting PASSED [ 56%]
 backend/tests/test_metrics.py::test_zero_actual_generation_safety PASSED [ 60%]
-backend/tests/test_metrics.py::test_empty_pairs PASSED                   [ 66%]
+backend/tests/test_metrics.py::test_empty_pairs PASSED                   [ 65%]
+backend/tests/test_metrics.py::test_coverage_calculation_precision PASSED [ 69%]
 backend/tests/test_metrics.py::test_lead_time_bucketing PASSED           [ 73%]
-backend/tests/test_selector.py::test_select_latest_eligible_forecast PASSED [ 80%]
-backend/tests/test_selector.py::test_prevent_look_ahead_bias PASSED      [ 86%]
-backend/tests/test_selector.py::test_missing_forecast_when_all_post_cutoff PASSED [ 93%]
+backend/tests/test_metrics.py::test_lead_time_boundary_disjointness PASSED [ 78%]
+backend/tests/test_metrics.py::test_sub_hour_and_extended_lead_times PASSED [ 82%]
+backend/tests/test_selector.py::test_select_latest_eligible_forecast PASSED [ 86%]
+backend/tests/test_selector.py::test_prevent_look_ahead_bias PASSED      [ 91%]
+backend/tests/test_selector.py::test_missing_forecast_when_all_post_cutoff PASSED [ 95%]
 backend/tests/test_selector.py::test_lead_time_calculation PASSED        [100%]
-======================= 15 passed in 5.41s ========================
+======================= 23 passed in 3.97s ========================
 ```
 
 ### Frontend Tests (`vitest`)
-Run the frontend component and utility test suite:
+Run the frontend component, store, and utility test suites:
 ```bash
 cd frontend
 npm test
 ```
 **Test Results:**
 ```text
- Test Files  2 passed (2)
-      Tests  7 passed (7)
-   Duration  6.87s
+ Test Files  3 passed (3)
+      Tests  15 passed (15)
+   Duration  6.97s
 ```
 
 ### Production Build Verification
