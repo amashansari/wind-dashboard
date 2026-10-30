@@ -11,14 +11,14 @@ export function Badge({
   ...props
 }: BadgeProps) {
   const variantStyles = {
-    default: "border-transparent bg-primary text-primary-foreground shadow-2xs",
-    secondary: "border-border/60 bg-secondary/80 text-secondary-foreground",
-    destructive: "border-rose-500/25 bg-rose-500/10 text-rose-600 dark:text-rose-400 font-semibold",
-    outline: "border-border/70 text-foreground bg-card/40 backdrop-blur-xs",
-    success: "border-emerald-500/25 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 font-semibold",
-    warning: "border-amber-500/25 bg-amber-500/10 text-amber-700 dark:text-amber-400 font-semibold",
-    lime: "border-lime-500/30 bg-lime-500/10 text-lime-600 dark:text-[#B7F36B] font-semibold",
-    cyan: "border-cyan-500/30 bg-cyan-500/10 text-cyan-600 dark:text-[#59C8E8] font-semibold",
+    default: "border-transparent bg-[#159B76] text-white shadow-2xs",
+    secondary: "border-[#E5EAF0] bg-[#F5F7FA] text-[#172033]",
+    destructive: "border-red-200 bg-red-50 text-[#DC6262] font-semibold",
+    outline: "border-[#E5EAF0] text-[#667085] bg-white",
+    success: "border-emerald-200 bg-[#E9F7F1] text-[#159B76] font-semibold",
+    warning: "border-amber-200 bg-amber-50 text-[#E8A23A] font-semibold",
+    lime: "border-emerald-200 bg-[#E9F7F1] text-[#159B76] font-semibold",
+    cyan: "border-blue-200 bg-blue-50 text-[#3989D6] font-semibold",
   };
 
   return (

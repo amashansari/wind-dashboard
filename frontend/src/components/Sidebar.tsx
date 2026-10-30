@@ -9,6 +9,7 @@ import {
   ChevronRight,
   Database,
   ExternalLink,
+  X,
 } from "lucide-react";
 import type { ActiveTab } from "../types";
 import { Badge } from "./ui/badge";
@@ -61,49 +62,61 @@ export function Sidebar({
       {/* Mobile Backdrop */}
       {isMobileOpen && (
         <div
-          className="fixed inset-0 bg-background/80 backdrop-blur-xs z-40 lg:hidden"
+          className="fixed inset-0 bg-slate-900/30 z-40 lg:hidden backdrop-blur-xs transition-opacity"
           onClick={onMobileClose}
         />
       )}
 
       {/* Sidebar Container */}
       <aside
-        className={`fixed lg:sticky top-0 left-0 z-50 h-screen bg-white/95 dark:bg-[#14283A]/95 backdrop-blur-xl border-r border-slate-200/80 dark:border-border/60 transition-all duration-300 flex flex-col shadow-sm dark:shadow-2xl ${
-          isCollapsed ? "w-20" : "w-64"
+        className={`fixed lg:sticky top-0 left-0 z-50 h-screen bg-white border-r border-[#E5EAF0] transition-all duration-200 flex flex-col shrink-0 ${
+          isCollapsed ? "w-18" : "w-64"
         } ${
           isMobileOpen
-            ? "translate-x-0"
-            : "-translate-x-full lg:translate-x-0"
+            ? "translate-x-0 shadow-xl"
+            : "-translate-x-full lg:translate-x-0 shadow-none"
         }`}
       >
         {/* Brand & Logo Header */}
-        <div className="h-16 px-4 flex items-center justify-between border-b border-slate-200/80 dark:border-border/60">
-          <div className="flex items-center space-x-3 overflow-hidden">
-            <div className="h-9 w-9 rounded-xl bg-linear-to-br from-emerald-500/15 to-cyan-500/10 border border-emerald-500/30 flex items-center justify-center text-[#16A477] dark:text-emerald-400 shadow-[0_0_15px_rgba(22,164,119,0.15)] dark:shadow-[0_0_15px_rgba(22,164,119,0.25)] shrink-0">
+        <div className="h-14 sm:h-16 px-4 flex items-center justify-between border-b border-[#E5EAF0]">
+          <div className="flex items-center space-x-2.5 overflow-hidden">
+            <div className="h-9 w-9 rounded-lg bg-[#E9F7F1] border border-emerald-200 flex items-center justify-center text-[#159B76] shrink-0">
               <Wind className="h-5 w-5" />
             </div>
             {!isCollapsed && (
               <div className="flex flex-col overflow-hidden">
                 <div className="flex items-center space-x-1.5">
-                  <span className="font-bold text-sm text-slate-900 dark:text-white tracking-tight truncate">
+                  <span className="font-bold text-sm text-[#172033] tracking-tight truncate">
                     Aerolytics
                   </span>
-                  <span className="text-[9px] font-mono px-1 py-0.2 rounded bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20 font-semibold">
+                  <span className="text-[9px] font-mono px-1 py-0.2 rounded bg-[#E9F7F1] text-[#159B76] border border-emerald-200 font-semibold">
                     UK
                   </span>
                 </div>
-                <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-mono tracking-wider truncate">
-                  Wind Intelligence
+                <span className="text-[10px] text-[#667085] uppercase font-mono tracking-wider truncate">
+                  Energy Analytics
                 </span>
               </div>
             )}
           </div>
 
+          {/* Mobile Close Button */}
+          {onMobileClose && (
+            <button
+              type="button"
+              onClick={onMobileClose}
+              className="lg:hidden p-1.5 rounded-lg border border-[#E5EAF0] text-[#667085] hover:text-[#172033] hover:bg-[#F5F7FA] transition-colors cursor-pointer"
+              aria-label="Close navigation"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          )}
+
           {/* Desktop Collapse Toggle */}
           <button
             type="button"
             onClick={() => setIsCollapsed(!isCollapsed)}
-            className="hidden lg:flex h-7 w-7 rounded-lg border border-slate-200/80 dark:border-border/70 items-center justify-center text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+            className="hidden lg:flex h-7 w-7 rounded-lg border border-[#E5EAF0] items-center justify-center text-[#667085] hover:text-[#172033] hover:bg-[#F5F7FA] transition-colors cursor-pointer"
             title={isCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
           >
             {isCollapsed ? (
@@ -115,10 +128,10 @@ export function Sidebar({
         </div>
 
         {/* Navigation Items */}
-        <div className="flex-1 py-4 px-3 space-y-1.5 overflow-y-auto">
+        <div className="flex-1 py-3 px-2.5 space-y-1 overflow-y-auto">
           {!isCollapsed && (
-            <div className="px-3 pb-2 text-[10px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-              Procurement Views
+            <div className="px-2.5 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-[#667085]">
+              Intelligence Views
             </div>
           )}
           {navItems.map((item) => {
@@ -129,25 +142,22 @@ export function Sidebar({
                 key={item.id}
                 type="button"
                 onClick={() => handleNavClick(item.id)}
-                className={`w-full flex items-center rounded-xl px-3 py-2.5 text-xs transition-all cursor-pointer relative ${
+                className={`w-full flex items-center rounded-lg px-2.5 py-2 text-xs transition-colors cursor-pointer text-left ${
                   isActive
-                    ? "bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-950 dark:text-white font-semibold shadow-xs border border-emerald-500/25 dark:border-emerald-500/40"
-                    : "text-slate-600 dark:text-slate-300 hover:bg-slate-100/70 dark:hover:bg-[#0B1220]/60 hover:text-slate-900 dark:hover:text-white font-medium"
-                } ${isCollapsed ? "justify-center" : "space-x-3"}`}
+                    ? "bg-[#E9F7F1] text-[#159B76] font-semibold border border-emerald-200"
+                    : "text-[#667085] hover:bg-[#F5F7FA] hover:text-[#172033] font-medium border border-transparent"
+                } ${isCollapsed ? "justify-center" : "space-x-2.5"}`}
                 title={isCollapsed ? item.label : undefined}
               >
-                {isActive && (
-                  <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-[#16A477] rounded-r-full shadow-[0_0_8px_#16A477]" />
-                )}
                 <Icon
-                  className={`h-4 w-4 shrink-0 transition-colors ${
-                    isActive ? "text-[#16A477] dark:text-[#59C8E8]" : "text-slate-400 dark:text-slate-400"
+                  className={`h-4.5 w-4.5 shrink-0 transition-colors ${
+                    isActive ? "text-[#159B76]" : "text-[#667085]"
                   }`}
                 />
                 {!isCollapsed && (
-                  <div className="text-left overflow-hidden">
-                    <div className="truncate text-slate-900 dark:text-white font-semibold">{item.label}</div>
-                    <div className="text-[10px] text-slate-500 dark:text-slate-400 font-normal truncate">
+                  <div className="overflow-hidden">
+                    <div className="truncate text-[#172033] font-semibold">{item.label}</div>
+                    <div className="text-[10px] text-[#667085] font-normal truncate">
                       {item.description}
                     </div>
                   </div>
@@ -158,27 +168,27 @@ export function Sidebar({
         </div>
 
         {/* Sidebar Footer Info Card */}
-        <div className="p-3 border-t border-slate-200/80 dark:border-border/60 space-y-3">
+        <div className="p-3 border-t border-[#E5EAF0] space-y-2.5">
           {!isCollapsed ? (
-            <div className="bg-slate-50 dark:bg-[#0B1220]/90 rounded-xl p-3 space-y-2 text-xs border border-slate-200/80 dark:border-border/60 shadow-xs dark:shadow-inner">
-              <div className="flex items-center space-x-2">
+            <div className="bg-[#F5F7FA] rounded-lg p-2.5 space-y-1.5 text-xs border border-[#E5EAF0]">
+              <div className="flex items-center space-x-1.5">
                 <span className="relative flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#159B76]"></span>
                 </span>
-                <span className="font-semibold text-slate-900 dark:text-white text-[11px]">
+                <span className="font-semibold text-[#172033] text-[11px]">
                   No Look-Ahead Guard
                 </span>
               </div>
-              <p className="text-[10px] text-slate-600 dark:text-slate-300 leading-relaxed">
-                Strict gate-closure reconstruction ensures zero future information leakage into historical decisions.
+              <p className="text-[10px] text-[#667085] leading-relaxed">
+                Strict gate-closure reconstruction ensures zero future information leakage.
               </p>
-              <div className="pt-1.5 border-t border-slate-200/70 dark:border-border/50 flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400">
+              <div className="pt-1.5 border-t border-[#E5EAF0] flex items-center justify-between text-[10px] text-[#667085]">
                 <span className="flex items-center space-x-1">
-                  <Database className="h-3 w-3 text-[#16A477] dark:text-[#59C8E8]" />
+                  <Database className="h-3 w-3 text-[#159B76]" />
                   <span>Elexon BMRS</span>
                 </span>
-                <Badge variant="outline" className="text-[9px] py-0 px-1 font-mono text-emerald-700 dark:text-[#B7F36B] border-emerald-500/30 dark:border-lime-500/30 bg-emerald-50/50 dark:bg-transparent">
+                <Badge variant="outline" className="text-[9px] py-0 px-1 font-mono text-[#159B76] border-emerald-200 bg-[#E9F7F1]">
                   Jan 2026
                 </Badge>
               </div>
@@ -186,10 +196,10 @@ export function Sidebar({
           ) : (
             <div className="flex flex-col items-center justify-center py-2 space-y-2">
               <span title="Look-Ahead Guard Active">
-                <ShieldCheck className="h-5 w-5 text-[#16A477] dark:text-emerald-400" />
+                <ShieldCheck className="h-5 w-5 text-[#159B76]" />
               </span>
               <span title="Elexon BMRS January 2026">
-                <Database className="h-4 w-4 text-slate-400 dark:text-slate-400" />
+                <Database className="h-4 w-4 text-[#667085]" />
               </span>
             </div>
           )}
@@ -200,9 +210,9 @@ export function Sidebar({
               href="https://bmrs.elexon.co.uk"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-between px-2 py-1 text-[11px] text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
+              className="flex items-center justify-between px-1 py-0.5 text-[11px] text-[#667085] hover:text-[#172033] transition-colors"
             >
-              <span>Elexon Insights Portal</span>
+              <span>Elexon Portal</span>
               <ExternalLink className="h-3 w-3" />
             </a>
           )}
