@@ -111,7 +111,7 @@ export function DateRangePicker({
           setSelectingStart(null);
         }}
         className={cn(
-          "flex h-8 items-center gap-2 rounded-lg border border-[#E5EAF0] bg-white px-2.5 py-1 text-xs font-medium text-[#172033] shadow-2xs hover:bg-[#F5F7FA] focus:outline-none focus:ring-1 focus:ring-[#159B76] transition-all cursor-pointer whitespace-nowrap",
+          "w-full flex h-8 items-center justify-between gap-2 rounded-lg border border-[#E5EAF0] bg-white px-2.5 py-1 text-xs font-medium text-[#172033] shadow-2xs hover:bg-[#F5F7FA] focus:outline-none focus:ring-1 focus:ring-[#159B76] transition-all cursor-pointer whitespace-nowrap",
           isOpen && "ring-1 ring-[#159B76] border-[#159B76]"
         )}
       >

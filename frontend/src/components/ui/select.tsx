@@ -63,11 +63,11 @@ export function Select({
         disabled={disabled}
         onClick={() => setIsOpen((prev) => !prev)}
         className={cn(
-          "flex h-8 items-center justify-between gap-1.5 rounded-lg border border-[#E5EAF0] bg-white px-2.5 py-1 text-xs font-medium text-[#172033] shadow-2xs hover:bg-[#F5F7FA] focus:outline-none focus:ring-1 focus:ring-[#159B76] transition-all cursor-pointer whitespace-nowrap",
+          "w-full flex h-8 items-center justify-between gap-1.5 rounded-lg border border-[#E5EAF0] bg-white px-2.5 py-1 text-xs font-medium text-[#172033] shadow-2xs hover:bg-[#F5F7FA] focus:outline-none focus:ring-1 focus:ring-[#159B76] transition-all cursor-pointer whitespace-nowrap",
           disabled && "opacity-50 cursor-not-allowed"
         )}
       >
-        <span className="truncate max-w-[210px]">
+        <span className="truncate flex-1 min-w-0 text-left">
           {selectedOption ? selectedOption.label : placeholder}
         </span>
         <ChevronDown
@@ -79,7 +79,7 @@ export function Select({
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 top-full mt-1.5 z-50 min-w-[240px] max-w-[320px] overflow-hidden rounded-lg border border-[#E5EAF0] bg-white p-1 text-[#172033] shadow-lg animate-in fade-in-80 slide-in-from-top-1">
+        <div className="absolute left-0 right-0 top-full mt-1.5 z-50 min-w-[220px] max-w-[320px] overflow-hidden rounded-lg border border-[#E5EAF0] bg-white p-1 text-[#172033] shadow-lg animate-in fade-in-80 slide-in-from-top-1">
           <div className="max-h-60 overflow-y-auto py-0.5 space-y-0.5">
             {options.map((option) => {
               const isSelected = option.value === value;

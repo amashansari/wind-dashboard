@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Sidebar } from "./components/Sidebar";
 import { Header } from "./components/Header";
-import { ControlBar } from "./components/ControlBar";
 import { OverviewView } from "./components/OverviewView";
 import { ForecastExplorerView } from "./components/ForecastExplorerView";
 import { AccuracyAnalysisView } from "./components/AccuracyAnalysisView";
@@ -38,18 +37,25 @@ export default function App() {
   const hasData = forecastData && forecastData.intervals && forecastData.intervals.length > 0;
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex">
-      {/* Sidebar Navigation */}
+    <div className="min-h-screen bg-[#F5F7FA] text-[#172033] flex">
+      {/* Sidebar Navigation & Drawer */}
       <Sidebar
         activeTab={activeTab}
         onTabChange={setActiveTab}
+        startDate={startDate}
+        endDate={endDate}
+        cutoffPreset={cutoffPreset}
+        onDateChange={handleDateChange}
+        onCutoffChange={handleCutoffChange}
+        onRefresh={refreshData}
+        isLoading={isLoading}
         isMobileOpen={isMobileSidebarOpen}
         onMobileClose={() => setIsMobileSidebarOpen(false)}
       />
 
       {/* Main Canvas Area */}
-      <div className="flex-1 min-w-0 flex flex-col">
-        {/* Top Header - Unified single row on desktop */}
+      <div className="flex-1 min-w-0 flex flex-col min-h-screen">
+        {/* Top Header - Compact single toolbar */}
         <Header
           health={health}
           metadata={metadata}
@@ -57,27 +63,10 @@ export default function App() {
           onRefresh={refreshData}
           onMenuClick={() => setIsMobileSidebarOpen(true)}
           activeTab={activeTab}
-          onTabChange={setActiveTab}
-          startDate={startDate}
-          endDate={endDate}
-          cutoffPreset={cutoffPreset}
-          onDateChange={handleDateChange}
-          onCutoffChange={handleCutoffChange}
         />
 
-        {/* Control Navigation & Filter Bar (automatically hidden on desktop xl:hidden) */}
-        <ControlBar
-          startDate={startDate}
-          endDate={endDate}
-          cutoffPreset={cutoffPreset}
-          activeTab={activeTab}
-          onDateChange={handleDateChange}
-          onCutoffChange={handleCutoffChange}
-          onTabChange={setActiveTab}
-        />
-
-      {/* Main Content Area */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        {/* Main Content Area - Starts immediately below header */}
+        <main className="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-5">
         {isLoading && !forecastData ? (
           <LoadingSkeleton />
         ) : error ? (

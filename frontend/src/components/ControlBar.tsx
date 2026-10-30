@@ -40,8 +40,8 @@ export function ControlBar({
 
   const tabs: Array<{ id: ActiveTab; label: string; icon: typeof LayoutDashboard }> = [
     { id: "overview", label: "Overview", icon: LayoutDashboard },
-    { id: "explorer", label: "Forecast Explorer", icon: Compass },
-    { id: "accuracy", label: "Accuracy Analysis", icon: BarChart3 },
+    { id: "explorer", label: "Forecast ", icon: Compass },
+    { id: "accuracy", label: "Accuracy", icon: BarChart3 },
   ];
 
   const cutoffOptions = [
@@ -87,6 +87,12 @@ export function ControlBar({
                   }`}
                 />
                 <span>{tab.label}</span>
+                {tab.id === "explorer" && (
+                  <span className="sr-only">Forecast Explorer</span>
+                )}
+                {tab.id === "accuracy" && (
+                  <span className="sr-only">Accuracy Analysis</span>
+                )}
               </button>
             );
           })}
